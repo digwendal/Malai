@@ -11,9 +11,9 @@
 
 import {KeysData} from "../interaction/library/KeysData";
 import {CommandImpl} from "../src-core/command/CommandImpl";
-import {KeyBinder} from "./KeyBinder";
+import {KeysBinder} from "./KeysBinder";
 
-export class KeysPressedBinder<C extends CommandImpl> extends KeyBinder<C, KeysPressedBinder<C>> {
+export class KeysPressedBinder<C extends CommandImpl> extends KeysBinder<C, KeysPressedBinder<C>> {
     public constructor(cmd: (i ?: KeysData) => C) {
         super(cmd);
     }

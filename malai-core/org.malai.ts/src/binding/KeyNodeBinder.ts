@@ -11,12 +11,13 @@
 
 import {CommandImpl} from "../src-core/command/CommandImpl";
 import {AnonNodeBinding} from "./AnonNodeBinding";
-import {KeyBinder} from "./KeyBinder";
+import {KeysBinder} from "./KeysBinder";
 import {KeysData} from "../interaction/library/KeysData";
 import {KeysPressed} from "../interaction/library/KeysPressed";
 import {TSWidgetBinding} from "./TSWidgetBinding";
 
-export class KeyNodeBinder<C extends CommandImpl> extends KeyBinder<C, KeyNodeBinder<C>> {
+
+export class KeyNodeBinder<C extends CommandImpl> extends KeysBinder<C, KeyNodeBinder<C>> {
 
     public constructor(cmdPoducer: (i ?: KeysData) => C) {
         super(cmdPoducer);

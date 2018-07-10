@@ -9,14 +9,9 @@
  * General Public License for more details.
  */
 
-
-import {FSM} from "../src-core/fsm/FSM";
 import {CommandImpl} from "../src-core/command/CommandImpl";
-import {Binder} from "./Binder";
-import {KeyInteraction} from "../interaction/library/KeyInteraction";
-import {KeyData} from "../interaction/library/KeyData";
+import {KeyBinder} from "./KeyBinder";
 
-export class KeyBinder<C extends CommandImpl, B extends KeyBinder<C, B>> extends
-    Binder<C, KeyInteraction<KeyData, FSM<Event>, {}>, KeyData, B> {
-    private readonly code: string;
+export class KeyTypedBinder<C extends CommandImpl> extends KeyBinder<C, KeyTypedBinder<C>> {
+
 }
