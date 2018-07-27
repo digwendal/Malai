@@ -169,11 +169,11 @@ export class FSM<E> {
      * Cancels the state machine.
      */
     public onCancelling(cancelState?: InputState<E>): void {
-        if (this.asLogFSM) {
-            catFSM.info(`FSM cancelled on state : ${cancelState === undefined ?
-                this.currentState.getName() : cancelState.getName()}`);
-        }
         if (this.started) {
+            if (this.asLogFSM) {
+                catFSM.info(`FSM cancelled on state : ${cancelState === undefined ?
+                    this.currentState.getName() : cancelState.getName()}`);
+            }
             this.notifyHandlerOnCancel();
         }
         this.fullReinit();
@@ -294,6 +294,7 @@ export class FSM<E> {
         try {
             this.handlers.forEach(handler => handler.fsmStarts());
         } catch (ex) {
+            catFSM.info("Failed to notify handlers on start");
             this.onCancelling();
             throw ex;
         }
@@ -306,6 +307,7 @@ export class FSM<E> {
         try {
             this.handlers.forEach(handler => handler.fsmUpdates());
         } catch (ex) {
+            catFSM.info("Failed to notify handlers on update");
             this.onCancelling();
             throw ex;
         }
@@ -318,6 +320,7 @@ export class FSM<E> {
         try {
             this.handlers.forEach(handler => handler.fsmStops());
         } catch (ex) {
+            catFSM.info("Failed to notify handlers on stop");
             this.onCancelling();
             throw ex;
         }
