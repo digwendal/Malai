@@ -101,7 +101,7 @@ test("Test the end() routine", () => {
 });
 
 test("Test cancel log message", () => {
-    nodeBinder(new DoubleClick(), () => new StubCmd()).on(button).log(LogLevel.BINDING).bind();
+    nodeBinder(new DoubleClick(), () => new StubCmd()).on(button).log(LogLevel.INTERACTION).bind();
     button.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseDown, button));
     button.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, button));
     expect(StubCmd.prototype.doIt).not.toHaveBeenCalled();

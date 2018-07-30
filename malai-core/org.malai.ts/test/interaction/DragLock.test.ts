@@ -27,7 +27,7 @@ beforeEach(() => {
     handler = new StubFSMHandler();
     interaction = new DragLock();
     interaction.log(true);
-    // interaction.getFsm().log(true);
+    interaction.getFsm().log(true);
     interaction.getFsm().addHandler(handler);
     document.documentElement.innerHTML = "<html><div><canvas id='canvas1' /></div></html>";
     const elt = document.getElementById("canvas1");
@@ -155,4 +155,16 @@ test("Check if the last DoubleClick with a different button don't stop the inter
     canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.Click, canvas, undefined, undefined, 20, 30, 0));
     expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
     expect(handler.fsmStops).not.toHaveBeenCalled();
+});
+
+test("Check if the second DoubleClick is canceled", () => {
+    interaction.registerToNodes([canvas]);
+    canvas.click();
+    canvas.click();
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    canvas.click();
+    canvas.dispatchEvent(createMouseEvent(EventRegistrationToken.MouseMove, canvas));
+    expect(handler.fsmStarts).toHaveBeenCalledTimes(1);
+    expect(handler.fsmStops).not.toHaveBeenCalled();
+    // expect(handler.fsmCancels).toHaveBeenCalledTimes(1);
 });

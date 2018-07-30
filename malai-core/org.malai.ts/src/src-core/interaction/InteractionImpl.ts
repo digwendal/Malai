@@ -12,12 +12,10 @@
 import {FSM} from "../fsm/FSM";
 import {OutputState} from "../fsm/OutputState";
 import {InitState} from "../fsm/InitState";
-import {Logger} from "typescript-logging";
 import {catInteraction} from "../logging/ConfigLog";
 import {InteractionData} from "./InteractionData";
 
 export abstract class InteractionImpl<D extends InteractionData, E, F extends FSM<E>> {
-    protected logger: Logger | undefined;
 
     protected readonly fsm: F;
 
@@ -64,7 +62,7 @@ export abstract class InteractionImpl<D extends InteractionData, E, F extends FS
 
     public setActivated(activated: boolean): void {
         if (this.asLog) {
-            catInteraction.info("Interaction activation: " + String(activated));
+            catInteraction.info(`Interaction activation: ${activated}`);
         }
         this.activated = activated;
         if (!activated) {

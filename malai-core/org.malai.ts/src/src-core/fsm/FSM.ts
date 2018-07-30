@@ -159,7 +159,8 @@ export class FSM<E> {
             this.notifyHandlerOnStop();
         }
         if (this.asLogFSM) {
-            catFSM.info(`FSM ended on state : ${terminalState.getName()}, type is ${terminalState.constructor.name}`);
+            catFSM.info(`FSM ${this.constructor.name} ended on state : ${
+                terminalState.getName()}, type is ${terminalState.constructor.name}`);
         }
         this.reinit();
         this.processRemainingEvents();
@@ -169,11 +170,11 @@ export class FSM<E> {
      * Cancels the state machine.
      */
     public onCancelling(cancelState?: InputState<E>): void {
-        if (this.asLogFSM) {
-            catFSM.info(`FSM cancelled on state : ${cancelState === undefined ?
-                this.currentState.getName() : cancelState.getName()}`);
-        }
         if (this.started) {
+            if (this.asLogFSM) {
+                catFSM.info(`FSM ${this.constructor.name} cancelled on state : ${cancelState === undefined ?
+                    this.currentState.getName() : cancelState.getName()}`);
+            }
             this.notifyHandlerOnCancel();
         }
         this.fullReinit();
@@ -184,7 +185,7 @@ export class FSM<E> {
      */
     public onStarting(): void {
         if (this.asLogFSM) {
-            catFSM.info(`FSM started with state : ${this.currentState.getName()}`);
+            catFSM.info(`FSM ${this.constructor.name} started with state : ${this.currentState.getName()}`);
         }
         this.started = true;
         this.notifyHandlerOnStart();
@@ -196,7 +197,7 @@ export class FSM<E> {
     public onUpdating(): void {
         if (this.started) {
             if (this.asLogFSM) {
-                catFSM.info(`FSM updated to the state :  ${this.currentState.getName()}`);
+                catFSM.info(`FSM ${this.constructor.name} updated to the state :  ${this.currentState.getName()}`);
             }
             this.notifyHandlerOnUpdate();
         }
