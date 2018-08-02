@@ -55,16 +55,20 @@ export abstract class Binder<C extends CommandImpl, I extends TSInteraction<D, F
      * @param widget The widgets involve in the bindings.
      * @return The builder to chain the building configuration.
      */
-    public on(widget: EventTarget | MArray<EventTarget>): B {
-        widget instanceof MArray ? this.widgets.push(...widget) : this.widgets.push(widget);
+    public on(widget: EventTarget | MArray<EventTarget> | null): B {
+        if (widget !== null) {
+            widget instanceof MArray ? this.widgets.push(...widget) : this.widgets.push(widget);
+        }
         return this as {} as B;
     }
 
-    public onContent(widget: Node): B {
-        if (this.additionalWidgets === undefined) {
-            this.additionalWidgets = new MArray<Node>();
+    public onContent(widget: Node | null): B {
+        if (widget !== null) {
+            if (this.additionalWidgets === undefined) {
+                this.additionalWidgets = new MArray<Node>();
+            }
+            this.additionalWidgets.push(widget);
         }
-        this.additionalWidgets.push(widget);
         return this as {} as B;
     }
 
