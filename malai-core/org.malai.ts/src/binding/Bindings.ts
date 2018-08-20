@@ -1,6 +1,6 @@
 /*
  * This file is part of Malai.
- * Copyright (c) 2009-2018 Arnaud BLOUIN
+ * Copyright (c) 2009-2018 Arnaud BLOUIN Gwendal DIDOT
  * Malai is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later version.
@@ -26,6 +26,8 @@ import {KeyNodeBinder} from "./KeyNodeBinder";
 import {DnDBinder} from "./DnDBinder";
 import {SrcTgtPointsData} from "../interaction/library/SrcTgtPointsData";
 import {DragLockBinder} from "./DragLockBinder";
+import {WindowClosedBinder} from "./WindowClosedBinder";
+import {TextInputChangedBinder} from "./TextInputChangedBinder";
 
 /**
  * Creates binding builder to build a binding between a given interaction and the given command type.
@@ -113,4 +115,13 @@ export function keyNodeBinder<C extends CommandImpl>(cmdProducer: (i ?: KeysData
 
 export function keysPressedBinder<C extends CommandImpl>(cmdProducer: (i ?: KeysData) => C): KeysPressedBinder<C> {
     return new KeysPressedBinder<C>(cmdProducer);
+}
+
+
+export function windowClosedBinder<C extends CommandImpl>(cmdProducer: (i ?: InteractionData) => C): WindowClosedBinder<C> {
+    return new WindowClosedBinder<C>(cmdProducer);
+}
+
+export function textInputChangedBinder<C extends CommandImpl>(cmdProducer: (i ?: WidgetData<Element>) => C): TextInputChangedBinder<C> {
+    return new TextInputChangedBinder<C>(cmdProducer);
 }
