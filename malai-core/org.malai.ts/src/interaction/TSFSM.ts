@@ -13,6 +13,7 @@ import {FSM} from "../src-core/fsm/FSM";
 import {InitState} from "../src-core/fsm/InitState";
 import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent} from "./Events";
+import {catFSM} from "../src-core/logging/ConfigLog";
 
 export abstract class TSFSM<H extends FSMDataHandler> extends FSM<Event> {
     protected dataHandler: H | undefined;
@@ -38,6 +39,10 @@ export abstract class TSFSM<H extends FSMDataHandler> extends FSM<Event> {
         }
 
         // Processing the event
+        if (this.asLogFSM) {
+            catFSM.info(`Event currently processed : ${event.type} in FSM : ${this.constructor.name}`);
+            this.setEventToLog(event.type);
+        }
         const processed: boolean = super.process(event);
 
         // Recycling events

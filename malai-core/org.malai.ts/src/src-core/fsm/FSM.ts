@@ -72,6 +72,8 @@ export class FSM<E> {
 
     protected currentSubFSM: FSM<E> | undefined;
 
+    private eventForLog: string;
+
     public constructor() {
         this._inner = false;
         this.started = false;
@@ -83,10 +85,19 @@ export class FSM<E> {
         this.handlers = new MArray();
         this.eventsToProcess = new MArray();
         this.asLogFSM = false;
+        this.eventForLog  = "";
+    }
+
+    public setEventToLog(event: string) {
+        this.eventForLog = event;
     }
 
     public setCurrentSubFSM(subFSM?: FSM<E>): void {
         this.currentSubFSM = subFSM;
+        if (this.asLogFSM && this.currentSubFSM !== undefined) {
+            this.currentSubFSM.log(this.asLogFSM);
+            this.currentSubFSM.setEventToLog(this.eventForLog);
+        }
     }
 
     public get currentState(): OutputState<E> {
@@ -172,8 +183,13 @@ export class FSM<E> {
     public onCancelling(cancelState?: InputState<E>): void {
         if (this.started) {
             if (this.asLogFSM) {
-                catFSM.info(`FSM ${this.constructor.name} cancelled on state : ${cancelState === undefined ?
-                    this.currentState.getName() : cancelState.getName()}`);
+                if (this.eventForLog !== "") {
+                    catFSM.info(`FSM ${this.constructor.name} cancelled on state : ${cancelState === undefined ?
+                        this.currentState.getName() : cancelState.getName()} with event : ${this.eventForLog}`);
+                } else {
+                    catFSM.info(`FSM ${this.constructor.name} cancelled on state : ${cancelState === undefined ?
+                        this.currentState.getName() : cancelState.getName()}`);
+                }
             }
             this.notifyHandlerOnCancel();
         }
@@ -217,7 +233,7 @@ export class FSM<E> {
 
     public reinit(): void {
         if (this.asLogFSM) {
-            catFSM.info("FSM reinitialised");
+            catFSM.info(`FSM ${this.constructor.name} reinitialised`);
         }
         if (this.currentTimeout !== undefined) {
             this.currentTimeout.stopTimeout();
