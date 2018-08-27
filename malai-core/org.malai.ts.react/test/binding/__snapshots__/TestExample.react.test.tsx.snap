@@ -1,3 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`test testComponent 1`] = `<div />`;
+exports[`Test binding React et fonctionnement interaction 1`] = `
+<div>
+  <button />
+</div>
+`;

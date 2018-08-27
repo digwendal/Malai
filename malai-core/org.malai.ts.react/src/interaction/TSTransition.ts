@@ -12,9 +12,10 @@
 import {Transition} from "../src-core/fsm/Transition";
 import {OutputState} from "../src-core/fsm/OutputState";
 import {InputState} from "../src-core/fsm/InputState";
+import * as React from "react";
 
-export abstract class TSTransition extends Transition<Event> {
-    protected constructor(srcState: OutputState<Event>, tgtState: InputState<Event>) {
+export abstract class TSTransition extends Transition<React.SyntheticEvent> {
+    protected constructor(srcState: OutputState<React.SyntheticEvent>, tgtState: InputState<React.SyntheticEvent>) {
         super(srcState, tgtState);
     }
 }

@@ -13,6 +13,7 @@ import {TSTransition} from "./TSTransition";
 import {OutputState} from "../src-core/fsm/OutputState";
 import {InputState} from "../src-core/fsm/InputState";
 import {EventRegistrationToken, isButton} from "./Events";
+import * as React from "react";
 
 /**
  * An FSM transition for the Button HTML element.
@@ -23,11 +24,11 @@ export class ButtonPressedTransition extends TSTransition {
     /**
      * Creates the transition.
      */
-    public constructor(srcState: OutputState<Event>, tgtState: InputState<Event>) {
+    public constructor(srcState: OutputState<React.SyntheticEvent>, tgtState: InputState<React.SyntheticEvent>) {
         super(srcState, tgtState);
     }
 
-    public accept(e: Event): boolean {
+    public accept(e: React.SyntheticEvent): boolean {
         return e.target !== null && isButton(e.target);
     }
 
@@ -35,7 +36,7 @@ export class ButtonPressedTransition extends TSTransition {
         return new Set([EventRegistrationToken.Click]);
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(event: React.SyntheticEvent): boolean {
         return true;
     }
 }

@@ -17,6 +17,7 @@ import {AnonNodeBinding} from "./AnonNodeBinding";
 import {FSM} from "../src-core/fsm/FSM";
 import {CommandImpl} from "../src-core/command/CommandImpl";
 import {InteractionData} from "../src-core/interaction/InteractionData";
+import * as React from "react";
 
 /**
  * The base class that defines the concept of binding builder (called binder).
@@ -25,7 +26,7 @@ import {InteractionData} from "../src-core/interaction/InteractionData";
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export abstract class Binder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData,
+export abstract class Binder<C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>, D extends InteractionData,
             B extends Binder<C, I, D, B>> {
 
     protected initCmd: (i: D, c: C | undefined) => void;

@@ -16,19 +16,22 @@ import {EventRegistrationToken} from "./Events";
 import {InteractionData} from "../src-core/interaction/InteractionData";
 import {WidgetData} from "../src-core/interaction/WidgetData";
 import {MArray} from "../util/ArrayUtil";
+import * as React from "react";
+import * as ReactDom from "react-dom";
 
-export abstract class TSInteraction<D extends InteractionData, F extends FSM<Event>, T> extends InteractionImpl<D, Event, F>
-        implements WidgetData<T> {
+
+export abstract class TSInteraction<D extends InteractionData, F extends FSM<React.SyntheticEvent>, T>
+    extends InteractionImpl<D, React.SyntheticEvent, F> implements WidgetData<T> {
     protected readonly _registeredNodes: Set<EventTarget>;
     protected readonly _registeredTargetNode: MArray<EventTarget>;
     protected readonly _additionalNodes: MArray<Node>;
     protected readonly listMutationObserver: MArray<MutationObserver>;
     /** The widget used during the interaction. */
     protected _widget: T | undefined;
-    private mouseHandler: ((e: MouseEvent) => void) | undefined;
-    private keyHandler: ((e: KeyboardEvent) => void) | undefined;
-    private uiHandler: ((e: UIEvent) => void) | undefined;
-    private actionHandler: EventListener | undefined;
+    private mouseHandler: ((e: React.MouseEvent) => void) | undefined;
+    private keyHandler: ((e: React.KeyboardEvent) => void) | undefined;
+    private uiHandler: ((e: React.UIEvent) => void) | undefined;
+    private actionHandler: ((e : React.SyntheticEvent) => void) | undefined;
 
     protected constructor(fsm: F) {
         super(fsm);
@@ -45,7 +48,7 @@ export abstract class TSInteraction<D extends InteractionData, F extends FSM<Eve
         return this._widget;
     }
 
-    protected updateEventsRegistered(newState: OutputState<Event>, oldState: OutputState<Event>): void {
+    protected updateEventsRegistered(newState: OutputState<React.SyntheticEvent>, oldState: OutputState<React.SyntheticEvent>): void {
         // Do nothing when the interaction has only two nodes: init node and terminal node (this is a single-event interaction).
         if (newState === oldState || this.fsm.getStates().length === 2) {
             return;
@@ -82,7 +85,7 @@ export abstract class TSInteraction<D extends InteractionData, F extends FSM<Eve
         });
     }
 
-    private getEventTypesOf(state: OutputState<Event>): Set<string> {
+    private getEventTypesOf(state: OutputState<React.SyntheticEvent>): Set<string> {
         return state.getTransitions().map(t => t.getAcceptedEvents()).reduce((a, b) => new Set([...a, ...b]));
     }
 
@@ -135,56 +138,61 @@ export abstract class TSInteraction<D extends InteractionData, F extends FSM<Eve
     }
 
     private registerEventToNode(eventType: string, node: EventTarget): void {
+
         if (EventRegistrationToken.MouseDown === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler());
+            node.addEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.MouseUp === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler());
+            node.addEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.Click === eventType) {
-            node.addEventListener(EventRegistrationToken.Click, this.getMouseHandler());
+            node.addEventListener(EventRegistrationToken.Click, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.MouseMove === eventType) {
-            node.addEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler());
+            node.addEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.KeyDown === eventType) {
-            node.addEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler());
+            node.addEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler);
             return;
         }
         if (EventRegistrationToken.KeyUp === eventType) {
-            node.addEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler());
+            node.addEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler);
             return;
         }
         if (EventRegistrationToken.Scroll === eventType) {
-            node.addEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
+            node.addEventListener(EventRegistrationToken.Scroll, this.getUIHandler);
             return;
         }
         if (EventRegistrationToken.BeforeUnload === eventType) {
-            node.addEventListener(EventRegistrationToken.BeforeUnload, this.getActionHandler());
+            node.addEventListener(EventRegistrationToken.BeforeUnload, this.getActionHandler);
         }
     }
 
-    protected registerActionHandlerClick(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.Click, this.getActionHandler());
+    protected registerActionHandlerClick(node: React.ReactInstance): void {
+        const nodeEvent = ReactDom.findDOMNode(node);
+        if (nodeEvent === null || nodeEvent instanceof Text) {
+            return;
+        }
+        nodeEvent.addEventListener(EventRegistrationToken.Click, this.getActionHandler);
     }
 
     protected unregisterActionHandlerClick(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.Click, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.Click, this.getActionHandler);
     }
 
     protected registerActionHandlerInput(node: EventTarget): void {
-        node.addEventListener(EventRegistrationToken.Input, this.getActionHandler());
+        node.addEventListener(EventRegistrationToken.Input, this.getActionHandler);
     }
 
     protected unregisterActionHandlerInput(node: EventTarget): void {
-        node.removeEventListener(EventRegistrationToken.Input, this.getActionHandler());
+        node.removeEventListener(EventRegistrationToken.Input, this.getActionHandler);
     }
 
-    protected getActionHandler(): EventListener {
+    protected getActionHandler(): (e : React.SyntheticEvent) => void {
         if (this.actionHandler === undefined) {
             this.actionHandler = evt => this.processEvent(evt);
         }
@@ -197,53 +205,53 @@ export abstract class TSInteraction<D extends InteractionData, F extends FSM<Eve
 
     private unregisterEventToNode(eventType: string, node: EventTarget): void {
         if (EventRegistrationToken.MouseDown === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler());
+            node.removeEventListener(EventRegistrationToken.MouseDown, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.MouseUp === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler());
+            node.removeEventListener(EventRegistrationToken.MouseUp, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.Click === eventType) {
-            node.removeEventListener(EventRegistrationToken.Click, this.getMouseHandler());
+            node.removeEventListener(EventRegistrationToken.Click, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.MouseMove === eventType) {
-            node.removeEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler());
+            node.removeEventListener(EventRegistrationToken.MouseMove, this.getMouseHandler);
             return;
         }
         if (EventRegistrationToken.KeyDown === eventType) {
-            node.removeEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler());
+            node.removeEventListener(EventRegistrationToken.KeyDown, this.getKeyHandler);
             return;
         }
         if (EventRegistrationToken.KeyUp === eventType) {
-            node.removeEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler());
+            node.removeEventListener(EventRegistrationToken.KeyUp, this.getKeyHandler);
             return;
         }
         if (EventRegistrationToken.Scroll === eventType) {
-            node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler());
+            node.removeEventListener(EventRegistrationToken.Scroll, this.getUIHandler);
             return;
         }
         if (EventRegistrationToken.BeforeUnload === eventType) {
-            node.removeEventListener(EventRegistrationToken.BeforeUnload, this.getActionHandler());
+            node.removeEventListener(EventRegistrationToken.BeforeUnload, this.getActionHandler);
         }
     }
 
-    protected getMouseHandler(): (e: MouseEvent) => void {
+    protected getMouseHandler(): (e: React.MouseEvent) => void {
         if (this.mouseHandler === undefined) {
             this.mouseHandler = evt => this.processEvent(evt);
         }
         return this.mouseHandler;
     }
 
-    protected getKeyHandler(): (e: KeyboardEvent) => void {
+    protected getKeyHandler(): (e: React.KeyboardEvent) => void {
         if (this.keyHandler === undefined) {
             this.keyHandler = evt => this.processEvent(evt);
         }
         return this.keyHandler;
     }
 
-    protected getUIHandler(): (e: UIEvent) => void {
+    protected getUIHandler(): (e: React.UIEvent) => void {
         if (this.uiHandler === undefined) {
             this.uiHandler = evt => this.processEvent(evt);
         }

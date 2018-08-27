@@ -12,34 +12,34 @@
 import * as React from "react";
 import {fireEvent, render} from "react-testing-library";
 import {nodeBinder} from "../../src/binding/Bindings";
-import {ButtonPressed} from "../../src/interaction/library/ButtonPressed";
 import {AnonCmd} from "../../src/src-core/command/AnonCmd";
+import {Click} from "../../src/interaction/library/Click";
 
 export interface IProps {}
 
-export class TestButtonComponent extends React.Component {
+export class ClickComponent extends React.Component {
 
-    public buttonRef: HTMLButtonElement | null;
+    public clickRef: HTMLDivElement | null;
 
     public constructor(props: IProps) {
         super(props);
     }
 
     public componentDidMount() {
-        nodeBinder(new ButtonPressed(), i => new AnonCmd(() => console.log("Test"))).on(this.buttonRef).bind();
+        nodeBinder(new Click(), i => new AnonCmd(() => console.log("Test"))).on(this.clickRef).bind();
     }
 
     public render() {
         return(
-            <div><button ref={elem => this.buttonRef = elem}>Test</button></div>
+            <div ref={elem => this.clickRef = elem}>Click</div>
         );
     }
 }
 
 
-test("Test binding React", () => {
-    const {getByText, debug} = render(<TestButtonComponent/>);
-    const testButton = getByText("Test");
-    fireEvent.click(testButton);
+test("Test click binding", () => {
+    const {getByText, debug} = render(<ClickComponent/>);
+    const click = getByText("Click");
+    fireEvent.click(click);
     debug();
 });

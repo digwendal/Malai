@@ -26,6 +26,7 @@ import {KeyNodeBinder} from "./KeyNodeBinder";
 import {DnDBinder} from "./DnDBinder";
 import {SrcTgtPointsData} from "../interaction/library/SrcTgtPointsData";
 import {DragLockBinder} from "./DragLockBinder";
+import * as React from "react";
 
 /**
  * Creates binding builder to build a binding between a given interaction and the given command type.
@@ -36,7 +37,7 @@ import {DragLockBinder} from "./DragLockBinder";
  * @return The binding builder. Cannot be null.
  * @throws NullPointerException If the given class is null.
  */
-export function nodeBinder<D extends InteractionData, C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>>
+export function nodeBinder<D extends InteractionData, C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>>
         (interaction: I, cmdProducer: (i?: D) => C): NodeBinder<C, I, D> {
     return new NodeBinder(interaction, cmdProducer);
 }
@@ -59,7 +60,7 @@ export function buttonBinder<C extends CommandImpl>(cmdProducer: (i?: WidgetData
  * @return The binding builder. Cannot be null.
  * @throws NullPointerException If the given class is null.
  */
-export function anonCmdBinder<D extends InteractionData, I extends TSInteraction<D, FSM<Event>, {}>>
+export function anonCmdBinder<D extends InteractionData, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>>
         (interaction: I, cmd: () => void): AnonCmdBinder<I, D> {
     return new AnonCmdBinder(interaction, cmd);
 }

@@ -17,6 +17,7 @@ import {InputState} from "../../src-core/fsm/InputState";
 import {OutputState} from "../../src-core/fsm/OutputState";
 import {PointInteraction} from "./PointInteraction";
 import {PointData} from "./PointData";
+import * as React from "react";
 
 export class ClickFSM extends TSFSM<ClickFSMHandler> {
     private checkButton: number | undefined;
@@ -31,18 +32,18 @@ export class ClickFSM extends TSFSM<ClickFSMHandler> {
         }
 
         super.buildFSM(dataHandler);
-        const clicked = new TerminalState<Event>(this, "clicked");
+        const clicked = new TerminalState<React.SyntheticEvent>(this, "clicked");
         this.addState(clicked);
 
         new class extends ClickTransition {
             private readonly _parent: ClickFSM;
 
-            public constructor(parent: ClickFSM, srcState: OutputState<Event>, tgtState: InputState<Event>) {
+            public constructor(parent: ClickFSM, srcState: OutputState<React.SyntheticEvent>, tgtState: InputState<React.SyntheticEvent>) {
                 super(srcState, tgtState);
                 this._parent = parent;
             }
 
-            public action(event: Event): void {
+            public action(event: React.SyntheticEvent): void {
                 if (event instanceof MouseEvent) {
                     this._parent.setCheckButton(event.button);
 
@@ -52,7 +53,7 @@ export class ClickFSM extends TSFSM<ClickFSMHandler> {
                 }
             }
 
-            public isGuardOK(event: Event): boolean {
+            public isGuardOK(event: React.SyntheticEvent): boolean {
                 return super.isGuardOK(event) && this._parent.checkButton === undefined ||
                     (event instanceof MouseEvent && event.button === this._parent.checkButton);
             }

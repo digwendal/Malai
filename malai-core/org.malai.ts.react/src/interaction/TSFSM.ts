@@ -13,8 +13,9 @@ import {FSM} from "../src-core/fsm/FSM";
 import {InitState} from "../src-core/fsm/InitState";
 import {FSMDataHandler} from "./FSMDataHandler";
 import {isKeyDownEvent} from "./Events";
+import * as React from "react";
 
-export abstract class TSFSM<H extends FSMDataHandler> extends FSM<Event> {
+export abstract class TSFSM<H extends FSMDataHandler> extends FSM<React.SyntheticEvent> {
     protected dataHandler: H | undefined;
 
     protected buildFSM(dataHandler?: H): void {
@@ -31,10 +32,10 @@ export abstract class TSFSM<H extends FSMDataHandler> extends FSM<Event> {
         }
     }
 
-    public process(event: Event): boolean {
+    public process(event: React.SyntheticEvent): boolean {
         // Removing the possible corresponding and pending key pressed event
         if (isKeyDownEvent(event)) {
-            this.removeKeyEvent(event.code);
+            this.removeKeyEvent(event.key);
         }
 
         // Processing the event
@@ -42,7 +43,7 @@ export abstract class TSFSM<H extends FSMDataHandler> extends FSM<Event> {
 
         // Recycling events
         if (processed && isKeyDownEvent(event) && !(this.currentState instanceof InitState) &&
-            this.eventsToProcess.find(evt => isKeyDownEvent(evt) && evt.code === event.code) === undefined) {
+            this.eventsToProcess.find(evt => isKeyDownEvent(evt) && evt.keyCode === event.keyCode) === undefined) {
             // this.addRemaningEventsToProcess((Event) event.clone()); //TODO
         }
 

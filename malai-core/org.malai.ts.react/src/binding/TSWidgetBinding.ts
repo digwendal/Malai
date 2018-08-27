@@ -15,9 +15,10 @@ import {FSM} from "../src-core/fsm/FSM";
 import {CommandImpl} from "../src-core/command/CommandImpl";
 import {Command} from "../src-core/command/Command";
 import {InteractionData} from "../src-core/interaction/InteractionData";
+import * as React from "react";
 
-export abstract class TSWidgetBinding<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
-        extends WidgetBindingImpl<C, I, D> {
+export abstract class TSWidgetBinding<C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>,
+    D extends InteractionData> extends WidgetBindingImpl<C, I, D> {
     /**
      * Creates a widget binding. This constructor must initialise the interaction. The binding is (de-)activated if the given
      * instrument is (de-)activated.

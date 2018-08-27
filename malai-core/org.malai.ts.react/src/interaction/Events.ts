@@ -9,6 +9,8 @@
  * General Public License for more details.
  */
 
+import * as React from "react";
+
 export enum EventRegistrationToken {
     MouseDown = "mousedown",
     MouseUp = "mouseup",
@@ -63,7 +65,7 @@ export function isWindowClosed(event: Event): boolean {
     return event.target === window && event.type === "beforeunload";
 }
 
-export function isKeyDownEvent(event: Event): event is KeyboardEvent {
+export function isKeyDownEvent(event: React.SyntheticEvent): event is React.KeyboardEvent {
     return event instanceof KeyboardEvent && event.type === "keydown";
 }
 

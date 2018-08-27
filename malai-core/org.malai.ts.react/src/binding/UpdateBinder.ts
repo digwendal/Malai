@@ -16,14 +16,15 @@ import {TSWidgetBinding} from "./TSWidgetBinding";
 import {AnonNodeBinding} from "./AnonNodeBinding";
 import {CommandImpl} from "../src-core/command/CommandImpl";
 import {InteractionData} from "../src-core/interaction/InteractionData";
+import * as React from "react";
 
 /**
  * The base binding builder for bindings where actions can be updated while the user interaction is running.
  * @param <A> The type of the command to produce.
  * @author Arnaud Blouin
  */
-export abstract class UpdateBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData,
-    B extends UpdateBinder<C, I, D, B>> extends Binder<C, I, D, B> {
+export abstract class UpdateBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>,
+    D extends InteractionData, B extends UpdateBinder<C, I, D, B>> extends Binder<C, I, D, B> {
 
     protected updateFct: (i: D, c: C | undefined) => void;
     protected cancelFct: (i: D, c: C | undefined) => void;

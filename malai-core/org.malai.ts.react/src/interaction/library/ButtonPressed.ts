@@ -17,6 +17,8 @@ import {isButton} from "../Events";
 import {TSInteraction} from "../TSInteraction";
 import {WidgetData} from "../../src-core/interaction/WidgetData";
 
+import * as React from "react";
+
 
 export class ButtonPressedFSM extends TSFSM<ButtonPressedFSMHandler> {
     public constructor() {
@@ -28,11 +30,11 @@ export class ButtonPressedFSM extends TSFSM<ButtonPressedFSMHandler> {
             return;
         }
         super.buildFSM(dataHandler);
-        const pressed: TerminalState<Event> = new TerminalState<Event>(this, "pressed");
+        const pressed: TerminalState<React.SyntheticEvent> = new TerminalState<React.SyntheticEvent>(this, "pressed");
         this.addState(pressed);
 
         new class extends ButtonPressedTransition {
-            public action(event: Event): void {
+            public action(event: React.SyntheticEvent): void {
                 if (event.target !== null && isButton(event.target) && dataHandler !== undefined) {
                     dataHandler.initToPressedHandler(event);
                 }
@@ -42,7 +44,7 @@ export class ButtonPressedFSM extends TSFSM<ButtonPressedFSMHandler> {
 }
 
 export interface ButtonPressedFSMHandler extends FSMDataHandler {
-    initToPressedHandler(event: Event): void;
+    initToPressedHandler(event: React.SyntheticEvent): void;
 }
 
 /**
@@ -65,7 +67,7 @@ export class ButtonPressed extends TSInteraction<WidgetData<Element>, ButtonPres
                 this._parent = parent;
             }
 
-            public initToPressedHandler(event: Event): void {
+            public initToPressedHandler(event: React.SyntheticEvent): void {
                 if (event.target !== null && isButton(event.target)) {
                     this._parent._widget = event.currentTarget as Element;
                 }

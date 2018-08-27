@@ -14,8 +14,10 @@ import {TSInteraction} from "../TSInteraction";
 import {PointData} from "./PointData";
 import {PointDataImpl} from "./PointDataImpl";
 import {Optional} from "../../util/Optional";
+import * as React from "react";
 
-export abstract class PointInteraction<D extends PointData, F extends FSM<Event>, T> extends TSInteraction<D, F, T> implements PointData {
+export abstract class PointInteraction<D extends PointData, F extends FSM<React.SyntheticEvent>, T> extends TSInteraction<D, F, T>
+    implements PointData {
     public readonly pointData: PointDataImpl;
 
     protected constructor(fsm: F) {

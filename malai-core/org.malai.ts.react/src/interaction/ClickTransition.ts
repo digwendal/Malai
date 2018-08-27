@@ -13,6 +13,7 @@ import {TSTransition} from "./TSTransition";
 import {InputState} from "../src-core/fsm/InputState";
 import {OutputState} from "../src-core/fsm/OutputState";
 import {EventRegistrationToken} from "./Events";
+import * as React from "react";
 
 /**
  * This transition corresponds to a pressure of a button of a pointing device.
@@ -22,15 +23,15 @@ export class ClickTransition extends TSTransition {
     /**
      * Creates the transition.
      */
-    public constructor(srcState: OutputState<Event>, tgtState: InputState<Event>) {
+    public constructor(srcState: OutputState<React.SyntheticEvent>, tgtState: InputState<React.SyntheticEvent>) {
         super(srcState, tgtState);
     }
 
-    public accept(event: Event): boolean {
+    public accept(event: React.SyntheticEvent): boolean {
         return event.type === "click" ;
     }
 
-    public isGuardOK(event: Event): boolean {
+    public isGuardOK(event: React.SyntheticEvent): boolean {
         return true;
     }
 

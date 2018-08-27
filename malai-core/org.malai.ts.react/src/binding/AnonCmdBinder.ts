@@ -16,8 +16,9 @@ import {TSWidgetBinding} from "./TSWidgetBinding";
 import {AnonNodeBinding} from "./AnonNodeBinding";
 import {AnonCmd} from "../src-core/command/AnonCmd";
 import {InteractionData} from "../src-core/interaction/InteractionData";
+import * as React from "react";
 
-export class AnonCmdBinder<I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
+export class AnonCmdBinder<I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>, D extends InteractionData>
             extends Binder<AnonCmd, I, D, AnonCmdBinder<I, D>> {
 
     public constructor(interaction: I, anonCmd: () => void) {

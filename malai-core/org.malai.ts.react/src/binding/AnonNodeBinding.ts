@@ -16,8 +16,9 @@ import {CommandImpl} from "../src-core/command/CommandImpl";
 import {InteractionData} from "../src-core/interaction/InteractionData";
 import {MArray} from "../util/ArrayUtil";
 import {LogLevel} from "../src-core/logging/LogLevel";
+import * as React from "react";
 
-export class AnonNodeBinding<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
+export class AnonNodeBinding<C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>, D extends InteractionData>
     extends TSWidgetBinding<C, I, D> {
 
     private readonly execInitCmd: (i: D, c: C | undefined) => void;

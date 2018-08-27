@@ -14,6 +14,7 @@ import {FSM} from "../src-core/fsm/FSM";
 import {UpdateBinder} from "./UpdateBinder";
 import {CommandImpl} from "../src-core/command/CommandImpl";
 import {InteractionData} from "../src-core/interaction/InteractionData";
+import * as React from "react";
 
 /**
  * The binding builder to create bindings between a given user interaction on a node and a given command.
@@ -21,7 +22,7 @@ import {InteractionData} from "../src-core/interaction/InteractionData";
  * @param <I> The type of the user interaction to bind.
  * @author Arnaud Blouin
  */
-export class NodeBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<Event>, {}>, D extends InteractionData>
+export class NodeBinder<C extends CommandImpl, I extends TSInteraction<D, FSM<React.SyntheticEvent>, {}>, D extends InteractionData>
             extends UpdateBinder<C, I, D, NodeBinder<C, I, D>> {
     public constructor(interaction: I, cmdProducer: (i?: D) => C) {
         super(interaction, cmdProducer);
