@@ -40,13 +40,13 @@ We provide a lot of built-in User Interaction :
 
 ## Binder :
 
-The binders are the main purpose of [Malai](https://github.com/arnobl/Malai), it the system that help you build
-easily. The binder possess two main element :
+The binders are the main purpose of [Malai](https://github.com/arnobl/Malai), it the system that help you build your interface. The binder possess two main element :
 * the binder  , like ButtonBinder or ColorPickedBinder (one Binder for each interaction WIP)
 * the bind() routine, that must be used to make the binder work
 
 example :
-```
+``` typescript
 nodeBinder<InteractionData, CommandeExecuted, Interaction>(i => new CommandeExecuted(i.getSomething)).bind()
 ```
-In this example WIP
+In this example :
+The function nodeBinder is a shortcut to WIP
