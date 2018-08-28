@@ -38,6 +38,34 @@ We provide a lot of built-in User Interaction :
 * Change the value of a spinner
 * Type a text (TextInputChanged)
 
+An user interaction is basically a [FSM](https://en.wikipedia.org/wiki/Finite-state_machine).
+
+For example the FSM of Click is :
+```plantuml
+@startuml
+    [*] --> Clicked : ClickTransition
+    Clicked: TerminalState
+@enduml
+``` 
+
+and the FSM of Drag and Drop is :
+```plantuml
+@startuml
+scale 400 height
+    [*] --> Pressed : PressureTransition
+    Pressed: StandardState
+    Pressed --> Cancelled : ReleaseTransition
+    Cancelled : CancellingState
+    Pressed --> Dragged : MoveTransition
+    Dragged : StandardState
+    Dragged --> Dragged : MoveTransition
+    Dragged --> Released : ReleasedTransition
+    Released : TerminalState
+    Pressed --> Cancelled : EscapeKeyPressureTransition
+    Dragged --> Cancelled : EscapeKeyPressureTransition
+@enduml
+```
+
 ## Binder :
 
 The binders are the main purpose of [Malai](https://github.com/arnobl/Malai), it the system that help you build your interface. The binder possess two main element :
@@ -46,7 +74,8 @@ The binders are the main purpose of [Malai](https://github.com/arnobl/Malai), it
 
 example :
 ``` typescript
-nodeBinder<InteractionData, CommandeExecuted, Interaction>(i => new CommandeExecuted(i.getSomething)).bind()
+nodeBinder<InteractionData, CommandeExecuted, Interaction>(i => new CommandeExecuted(i.getSomething)).on(target).bind()
 ```
-In this example :
-The function nodeBinder is a shortcut to WIP
+(The function nodeBinder is a shortcut to help create the binder)
+
+In this example, the node binder bind the user interaction "Interaction" with the HTML element "target".

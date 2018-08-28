@@ -3,5 +3,6 @@ node_modules/
 /org.malai.ts.iml
 /.tscache
 /coverage
-./rpt2_cache
+./.rpt2_cache
+./compiled_inter
 lib
